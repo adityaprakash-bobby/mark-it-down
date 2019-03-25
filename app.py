@@ -17,7 +17,7 @@ def home():
         
         return render_template('home.html', mkd=mkd)
     
-    mkd = 'None'
+    mkd = ''
 
     return render_template('home.html', mkd=mkd)
 
