@@ -12,7 +12,7 @@
                     <form method="POST" action="{{ url_for('home') }}">
                         <div class="form-group">
                             <textarea class="form-control" type="text" name="simplemarkdown" id="exampleFormControlTextarea1" rows="24" placeholder="Enter you markdown text"></textarea>
-                            <input type="submit"/>
+                            <input type="submit" value="submit"/>
                         </div>
                     </form>
                 </div>
@@ -21,7 +21,7 @@
                         <div class="card-body">
                             <p class="card-text">
                                 <span id="viewMarkdown">
-                                    {{mkd|markdown}}
+                                    {{mkd|safe}}
                                 </span>
                             </p>
                         </div>
