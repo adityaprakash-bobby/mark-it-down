@@ -1,7 +1,18 @@
 <html>
     <head>
+
+        <meta charset="UTF-8">
+        
         <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+        
+        <!-- sijax -->
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+        <script type="text/javascript" src="/static/js/sijax/sijax.js"></script>
+        <script type="text/javascript">
+            {{ g.sijax.get_js()|safe }}
+        </script>
+    
     </head>
     <body>
         <!-- <br> -->
@@ -9,9 +20,10 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-6">
-                    <form method="POST" action="{{ url_for('home') }}">
+                    <form id="markdownForm" name="markdownForm">
                         <div class="form-group">
-                            <textarea class="form-control" type="text" name="simplemarkdown" id="exampleFormControlTextarea1" rows="24" placeholder="Enter you markdown text"></textarea>
+                            <textarea class="form-control" type="text" name="mkdown" id="mkdown" rows="24" placeholder="Enter you markdown text"></textarea>
+                            <!-- <input type="text" name="mkdown" id="mkdown" style="height: 590px"> -->
                             <input type="submit" value="submit"/>
                         </div>
                     </form>
@@ -19,37 +31,36 @@
                 <div class="col-sm-6">
                     <div class="card scrollClass">
                         <div class="card-body">
-                            <p class="card-text">
+                            <!-- <p class="card-text"> -->
                                 <span id="viewMarkdown">
-                                    {{mkd|safe}}
                                 </span>
-                            </p>
+                            <!-- </p> -->
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <script>
-            function markdown(sourceElem, destElem, mkd) {
-                $(destElem).html('<img src="{{ url_for('static', filename='loading.gif') }}">');
-                $.post('/markdown', {
-                    simplemarkdown: mkd
-                }).done(function(response) {
-                    $(destElem).text(response['simplemarkdown'])
-                }).fail(function() {
-                    $(destElem).text("{{ 'Error: Could not contact server.' }}");
+        <script type="text/javascript">
+            $(function() {
+                $('#markdownForm').bind('submit', function() {
+                    Sijax.request('save_message', [$('#mkdown').attr('value')],
+                        { data: { csrf_token: "{{ csrf_token() }}" } });
+                    return false;
                 });
-            }
+                $('#mkdown').focus();
+                $('#btnClear').bind('click', function() {
+                    Sijax.request('clear_messages', [], { data: { csrf_token: "{{ csrf_token() }}" } });
+                    return false;
+                });
+            });
         </script>
-
-
         <!-- Dynamic site root -->
         <script type=text/javascript>
             $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
         </script>
 
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> -->
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o" crossorigin="anonymous"></script>
     </body>
