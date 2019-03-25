@@ -1,12 +1,7 @@
 <html>
     <head>
         <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        <style>
-            .scrollClass {
-            height:590px;
-            overflow-y: auto;
-            }   
-        </style>
+        <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
     </head>
     <body>
         <!-- <br> -->
@@ -14,9 +9,10 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-6">
-                    <form method="GET" action="">
+                    <form method="POST" action="{{ url_for('home') }}">
                         <div class="form-group">
-                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="24" placeholder="Enter you markdown text"></textarea>
+                            <textarea class="form-control" type="text" name="simplemarkdown" id="exampleFormControlTextarea1" rows="24" placeholder="Enter you markdown text"></textarea>
+                            <input type="submit"/>
                         </div>
                     </form>
                 </div>
@@ -24,7 +20,9 @@
                     <div class="card scrollClass">
                         <div class="card-body">
                             <p class="card-text">
-                                {{mkd|markdown}}
+                                <span id="viewMarkdown">
+                                    {{mkd|markdown}}
+                                </span>
                             </p>
                         </div>
                     </div>
@@ -33,18 +31,25 @@
         </div>
 
         <script>
-            var value = $('.textbox').val();
-            $.ajax({
-                type: 'POST',
-                url: "{{ url_for('home') }}",
-                data: JSON.stringify(value),
-                contentType: 'application/json',
-                success: function(data){
-                // do something with the received data
-                }
-            });        
+            function markdown(sourceElem, destElem, mkd) {
+                $(destElem).html('<img src="{{ url_for('static', filename='loading.gif') }}">');
+                $.post('/markdown', {
+                    simplemarkdown: mkd
+                }).done(function(response) {
+                    $(destElem).text(response['simplemarkdown'])
+                }).fail(function() {
+                    $(destElem).text("{{ 'Error: Could not contact server.' }}");
+                });
+            }
         </script>
 
+
+        <!-- Dynamic site root -->
+        <script type=text/javascript>
+            $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+        </script>
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o" crossorigin="anonymous"></script>
     </body>
