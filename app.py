@@ -75,7 +75,7 @@ class SijaxHandler(object):
         mkd = md.convert(message)
 
         message = """
-        <div id="%s" style="opacity: 0;">
+        <div id="%s" style="opacity: 1;">
         %s
         </div>
         """ % (message_id, mkd)

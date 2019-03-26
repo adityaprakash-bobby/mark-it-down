@@ -1,6 +1,6 @@
 <html>
     <head>
-
+        <title>Mark-it-Down</title>
         <meta charset="UTF-8">
         
         <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -49,12 +49,22 @@
                     return false;
                 });
                 $('#mkdown').focus();
-                $('#btnClear').bind('click', function() {
-                    Sijax.request('clear_messages', [], { data: { csrf_token: "{{ csrf_token() }}" } });
-                    return false;
-                });
             });
         </script>
+        <!-- <script type="text/javascript">
+            window.onload=function(){
+                var auto = setTimeout(function(){ autoRefresh(); }, 100);
+        
+                function submitform(){
+                  document.forms["markdownForm"].submit();
+                }
+        
+                function autoRefresh(){
+                   clearTimeout(auto);
+                   auto = setTimeout(function(){ submitform(); autoRefresh(); }, 1000);
+                }
+            }
+        </script> -->
         <!-- Dynamic site root -->
         <script type=text/javascript>
             $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
