@@ -43,18 +43,28 @@ def check_csrf_token():
 
 # Setup for markdown extensions
 
-extensions=[
+MARKDOWN_EXTENSIONS = [
     ChecklistExtension(),
     UnimojiExtension(), 
     'fenced_code', 
     'codehilite',
     'extra', 
-    'tables'
+    'tables',
+    'admonition',
+    'abbr',
+    'attr_list',
+    'def_list',
+    'footnotes',
+    'legacy_em',
+    'nl2br',
+    'sane_lists',
+    'smarty',
+    'toc',
     ]
 
 # Initialize markdown object
 
-md = Markdown(extensions=extensions)
+md = Markdown(extensions=MARKDOWN_EXTENSIONS)
 
 
 class SijaxHandler(object):
@@ -130,4 +140,4 @@ def home():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
