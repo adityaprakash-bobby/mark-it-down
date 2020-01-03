@@ -2,8 +2,6 @@
 
 Yet another markdown viewer as a flask application.
 
-`Under development`
-
 ## Run the project locally
 
 ```bash
