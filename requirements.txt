@@ -1,5 +1,5 @@
 astroid==2.2.5
-Babel==2.6.0
+Babel==2.9.1
 Click==7.0
 Flask==1.0.2
 Flask-Babel==0.12.2
